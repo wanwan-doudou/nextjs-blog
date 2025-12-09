@@ -1,0 +1,27 @@
+<!-- 音乐播放器组件 -->
+<aside id="sidebar-music-player">
+    <div class="panel panel-gal" data-aos="flip-right" data-aos-duration="3000">
+        <div class="panel-heading">
+            <i class="fa fa-music"></i>
+            <%= theme.music_player.title || '歌单' %>
+            <i class="fa fa-times-circle panel-remove"></i>
+            <i class="fa fa-chevron-circle-up panel-toggle"></i>
+        </div>
+        <div style="opacity: 0.4;font-weight: 600;" id="my-aplayer" class="aplayer" 
+             data-id="<%= theme.music_player.playlist_id %>" 
+             data-server="<%= theme.music_player.server %>"
+             data-type="playlist" 
+             data-fixed="false" 
+             data-autoplay="<%= theme.music_player.autoplay %>" 
+             data-order="<%= theme.music_player.order %>" 
+             data-volume="<%= theme.music_player.volume %>"
+             data-theme="<%= theme.music_player.theme %>" 
+             data-preload="auto" 
+             data-listFolded="<%= theme.music_player.list_folded %>">
+        </div>
+    </div>
+</aside>
+
+<!-- 引用APlayer和MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>

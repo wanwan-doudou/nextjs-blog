@@ -1,0 +1,417 @@
+<!-- 壁纸页面 - 瀑布流 + 懒加载 -->
+<style>
+/* 壁纸页面样式 */
+.wallpaper-container {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.wallpaper-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.wallpaper-header h1 {
+  color: #cc543a;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.wallpaper-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.wallpaper-controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.wallpaper-controls .btn {
+  margin: 5px;
+}
+
+/* 瀑布流容器 - 使用flex实现行优先 */
+.waterfall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+/* 单个图片项宽度 */
+.waterfall-item {
+  width: calc(25% - 12px);
+}
+
+@media (max-width: 1200px) {
+  .waterfall-item { width: calc(33.333% - 10px); }
+}
+
+@media (max-width: 768px) {
+  .waterfall-item { width: calc(50% - 8px); }
+}
+
+@media (max-width: 480px) {
+  .waterfall-item { width: 100%; }
+}
+
+/* 单个图片项附加样式 */
+.waterfall-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f0f0;
+  min-height: 150px;
+}
+
+.waterfall-item img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+  transition: transform 0.3s ease, opacity 0.5s ease;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.waterfall-item img.loaded {
+  opacity: 1;
+}
+
+.waterfall-item:hover img {
+  transform: scale(1.05);
+}
+
+/* 加载中占位 */
+.waterfall-item .loading-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #999;
+  font-size: 14px;
+}
+
+/* 加载更多按钮 */
+.load-more-container {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.load-more-btn {
+  padding: 12px 40px;
+  font-size: 16px;
+  background: #cc543a;
+  border: none;
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  background: #b54432;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(204, 84, 58, 0.3);
+}
+
+.load-more-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 图片统计 */
+.wallpaper-stats {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Lightbox 弹窗 */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-overlay.active {
+  display: flex;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 90%;
+  position: relative;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 4px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+</style>
+
+<div class="wallpaper-container">
+  <div class="wallpaper-header">
+    <h1><i class="fa fa-image"></i> 壁纸库</h1>
+    <p>随机二次元高清壁纸，点击图片查看大图</p>
+  </div>
+  
+  <div class="wallpaper-controls">
+    <button class="btn btn-danger" id="refresh-btn">
+      <i class="fa fa-refresh"></i> 刷新全部
+    </button>
+    <button class="btn btn-default" id="switch-api-btn">
+      <i class="fa fa-random"></i> 切换API源
+    </button>
+  </div>
+  
+  <div class="waterfall" id="waterfall"></div>
+  
+  <div class="wallpaper-stats">
+    已加载 <span id="loaded-count">0</span> 张壁纸
+  </div>
+  
+  <div class="load-more-container"> 
+    <button class="load-more-btn" id="load-more-btn">
+      <i class="fa fa-plus"></i> 加载更多
+    </button>
+  </div>
+</div>
+
+<!-- Lightbox 弹窗 -->
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-content">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <img src="" alt="壁纸大图" id="lightbox-img">
+  </div>
+</div>
+
+<script>
+(function() {
+  // 壁纸配置
+  var pcApiUrls = <%- JSON.stringify(theme.wallpaper.pc_api_urls || []) %>;
+  var mobileApiUrls = <%- JSON.stringify(theme.wallpaper.mobile_api_urls || []) %>;
+  var batchSize = <%= theme.wallpaper.batch_size || 12 %>;
+  var maxImages = <%= theme.wallpaper.max_images || 120 %>;
+  
+  // 判断是否为移动设备
+  var isMobile = window.innerWidth <= 768;
+  var apiUrls = (isMobile && mobileApiUrls.length > 0) ? mobileApiUrls : pcApiUrls;
+  
+  var currentApiIndex = 0;
+  var loadedCount = 0;
+  var isLoading = false;
+  var autoLoadEnabled = true; // 是否启用自动加载
+  
+  var waterfall = document.getElementById('waterfall');
+  var loadMoreBtn = document.getElementById('load-more-btn');
+  var refreshBtn = document.getElementById('refresh-btn');
+  var switchApiBtn = document.getElementById('switch-api-btn');
+  var loadedCountEl = document.getElementById('loaded-count');
+  
+  // Lightbox 相关元素
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+  var lightboxClose = document.getElementById('lightbox-close');
+  
+  // 获取当前API
+  function getCurrentApi() {
+    return apiUrls[currentApiIndex % apiUrls.length];
+  }
+  
+  // 生成唯一URL（防缓存）
+  function getUniqueImageUrl() {
+    var api = getCurrentApi();
+    var timestamp = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    var separator = api.indexOf('?') !== -1 ? '&' : '?';
+    return api + separator + '_t=' + timestamp;
+  }
+  
+  // 创建单个图片项
+  function createImageItem() {
+    var item = document.createElement('div');
+    item.className = 'waterfall-item';
+    
+    var placeholder = document.createElement('div');
+    placeholder.className = 'loading-placeholder';
+    placeholder.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 加载中...';
+    item.appendChild(placeholder);
+    
+    var img = document.createElement('img');
+    var imgUrl = getUniqueImageUrl();
+    
+    img.onload = function() {
+      placeholder.style.display = 'none';
+      img.classList.add('loaded');
+      loadedCount++;
+      loadedCountEl.textContent = loadedCount;
+    };
+    
+    img.onerror = function() {
+      placeholder.innerHTML = '<i class="fa fa-exclamation-circle"></i> 加载失败';
+      // 尝试用其他API重试
+      setTimeout(function() {
+        currentApiIndex++;
+        img.src = getUniqueImageUrl();
+      }, 1000);
+    };
+    
+    img.src = imgUrl;
+    img.alt = '随机壁纸';
+    img.setAttribute('data-src', imgUrl);
+    
+    // 点击查看大图
+    img.onclick = function() {
+      openLightbox(this.src);
+    };
+    
+    item.appendChild(img);
+    
+    return item;
+  }
+  
+  // 获取当前图片数量
+  function getCurrentImageCount() {
+    return waterfall.querySelectorAll('.waterfall-item').length;
+  }
+  
+  // 加载一批图片
+  function loadBatch() {
+    if (isLoading) return;
+    
+    var currentCount = getCurrentImageCount();
+    if (currentCount >= maxImages) {
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.innerHTML = '<i class="fa fa-check"></i> 已加载全部';
+      autoLoadEnabled = false;
+      return;
+    }
+    
+    isLoading = true;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 加载中...';
+    
+    // 计算实际加载数量（不超过上限）
+    var remainingSlots = maxImages - currentCount;
+    var actualBatchSize = Math.min(batchSize, remainingSlots);
+    
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < actualBatchSize; i++) {
+      fragment.appendChild(createImageItem());
+    }
+    waterfall.appendChild(fragment);
+    
+    setTimeout(function() {
+      isLoading = false;
+      var newCount = getCurrentImageCount();
+      if (newCount >= maxImages) {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.innerHTML = '<i class="fa fa-check"></i> 已加载全部';
+        autoLoadEnabled = false;
+      } else {
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.innerHTML = '<i class="fa fa-plus"></i> 加载更多';
+      }
+    }, 500);
+  }
+  
+  // 刷新全部
+  function refreshAll() {
+    waterfall.innerHTML = '';
+    loadedCount = 0;
+    loadedCountEl.textContent = '0';
+    autoLoadEnabled = true;
+    loadMoreBtn.disabled = false;
+    loadMoreBtn.innerHTML = '<i class="fa fa-plus"></i> 加载更多';
+    loadBatch();
+  }
+  
+  // 切换API源
+  function switchApi() {
+    currentApiIndex = (currentApiIndex + 1) % apiUrls.length;
+    var apiName = getCurrentApi().split('/').pop();
+    alert('已切换到: ' + apiName);
+  }
+  
+  // 打开Lightbox
+  function openLightbox(src) {
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  // 关闭Lightbox
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  // 事件绑定
+  loadMoreBtn.onclick = loadBatch;
+  refreshBtn.onclick = refreshAll;
+  switchApiBtn.onclick = switchApi;
+  lightboxClose.onclick = closeLightbox;
+  lightbox.onclick = function(e) {
+    if (e.target === lightbox) closeLightbox();
+  };
+  
+  // ESC关闭Lightbox
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+  
+  // 初始加载
+  loadBatch();
+  
+  // 滚动节流
+  var scrollThrottleTimer = null;
+  
+  // 滚动懒加载（可选：滚到底部自动加载更多）
+  window.addEventListener('scroll', function() {
+    // 检查是否允许自动加载
+    if (!autoLoadEnabled || isLoading) return;
+    
+    // 节流：300ms内只执行一次
+    if (scrollThrottleTimer) return;
+    
+    scrollThrottleTimer = setTimeout(function() {
+      scrollThrottleTimer = null;
+      
+      if (!autoLoadEnabled || isLoading) return;
+      
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var windowHeight = window.innerHeight;
+      var docHeight = document.documentElement.scrollHeight;
+      
+      // 距离底部300px时自动加载
+      if (scrollTop + windowHeight >= docHeight - 300) {
+        loadBatch();
+      }
+    }, 300);
+  });
+})();
+</script>
