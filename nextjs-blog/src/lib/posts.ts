@@ -59,12 +59,25 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   // 计算阅读时间
   const stats = readingTime(content);
 
-  // 生成摘要
+  // 生成摘要 - 移除所有markdown语法
   const excerpt =
     data.excerpt ||
     content
       .replace(/^#+\s+.+$/gm, "") // 移除标题
-      .replace(/\n/g, " ")
+      .replace(/```[\s\S]*?```/g, "") // 移除代码块
+      .replace(/`[^`]+`/g, "") // 移除行内代码
+      .replace(/!\[.*?\]\(.*?\)/g, "") // 移除图片
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // 链接转文字
+      .replace(/\*\*([^*]+)\*\*/g, "$1") // 移除粗体
+      .replace(/\*([^*]+)\*/g, "$1") // 移除斜体
+      .replace(/^>\s+/gm, "") // 移除引用
+      .replace(/^[-*+]\s+/gm, "") // 移除无序列表标记
+      .replace(/^\d+\.\s+/gm, "") // 移除有序列表标记
+      .replace(/\|[^|]+\|/g, "") // 移除表格
+      .replace(/---+/g, "") // 移除分隔线
+      .replace(/\n+/g, " ") // 换行转空格
+      .replace(/\s+/g, " ") // 多空格合并
+      .trim()
       .slice(0, 200) + "...";
 
   return {

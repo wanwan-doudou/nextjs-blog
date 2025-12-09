@@ -12,8 +12,8 @@ export const siteConfig = {
   navbarText: "Gal Blog",
 
   // 背景图配置
-  xsBgImage: "/imgs/xsbg.gif",
-  authorImage: "/imgs/avatar.jpg",
+  xsBgImage: "https://t.alcy.cc/ycy",
+  authorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=gal",
 
   // 导航菜单
   menu: [
