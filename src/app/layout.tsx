@@ -4,6 +4,9 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Slideshow } from "@/components/layout/Slideshow";
+import { MusicPlayer } from "@/components/features/MusicPlayer";
+import { SakanaWidget } from "@/components/features/SakanaWidget";
+import { BackToTop } from "@/components/features/BackToTop";
 import { siteConfig } from "@/config/site";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,6 +30,9 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <MusicPlayer />
+        <SakanaWidget />
+        <BackToTop />
       </body>
     </html>
   );

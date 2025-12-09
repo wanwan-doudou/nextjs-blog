@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[60vh]">
       <div className="text-center">
@@ -20,7 +26,7 @@ export default function NotFound() {
           </Link>
           <Button
             variant="outline"
-            onClick={() => window.history.back()}
+            onClick={handleGoBack}
             className="border-white/20 text-white hover:bg-white/10"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
