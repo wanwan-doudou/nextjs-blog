@@ -12,7 +12,7 @@
     "version": "8.1.1"
   },
   "dependencies": {
-    "electron": "^34.2.0",
+    "electron": "^39.2.7",
     "hexo": "^8.1.1",
     "hexo-deployer-git": "^4.0.0",
     "hexo-generator-archive": "^2.0.0",
