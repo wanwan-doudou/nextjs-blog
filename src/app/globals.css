@@ -370,3 +370,28 @@
 .aplayer-transparent .aplayer-miniswitcher {
   display: none !important;
 }
+
+@keyframes slideshow-kenburns-a {
+  0% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes slideshow-kenburns-b {
+  0% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideshow-layer {
+    animation: none !important;
+    transition: none !important;
+  }
+}

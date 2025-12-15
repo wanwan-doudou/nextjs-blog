@@ -36,7 +36,8 @@ export const siteConfig = {
   // 背景轮播图
   slideBackground: {
     useApi: true,
-    apiCount: 6,
+    apiCount: 2,
+    intervalMs: 8000,
     apiUrls: [
       "https://t.alcy.cc/ycy",
       "https://t.alcy.cc/ysz",

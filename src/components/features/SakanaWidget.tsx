@@ -6,12 +6,14 @@ import Script from "next/script";
 
 export function SakanaWidget() {
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    setIsDesktop(window.matchMedia("(min-width: 768px)").matches);
   }, []);
 
-  if (!siteConfig.sakanaWidget.enable || !mounted) return null;
+  if (!siteConfig.sakanaWidget.enable || !mounted || !isDesktop) return null;
 
   const { position } = siteConfig.sakanaWidget;
 

@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { cache } from "react";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
@@ -24,45 +25,15 @@ export interface Post extends PostMeta {
   content: string;
 }
 
-// 确保目录存在
-function ensurePostsDirectory() {
-  if (!fs.existsSync(postsDirectory)) {
-    fs.mkdirSync(postsDirectory, { recursive: true });
-  }
+function normalizeDate(input?: string): string {
+  return input ? new Date(input).toISOString() : new Date().toISOString();
 }
 
-// 获取所有文章的slug
-export function getPostSlugs(): string[] {
-  ensurePostsDirectory();
-  const files = fs.readdirSync(postsDirectory);
-  return files
-    .filter((file) => file.endsWith(".md"))
-    .map((file) => file.replace(/\.md$/, ""));
-}
+function buildExcerpt(markdown: string, fallback?: string): string {
+  if (fallback) return fallback;
 
-// 根据slug获取文章数据
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  ensurePostsDirectory();
-  const fullPath = path.join(postsDirectory, `${slug}.md`);
-
-  if (!fs.existsSync(fullPath)) {
-    return null;
-  }
-
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  const { data, content } = matter(fileContents);
-
-  // 处理Markdown
-  const processedContent = await remark().use(html).process(content);
-  const contentHtml = processedContent.toString();
-
-  // 计算阅读时间
-  const stats = readingTime(content);
-
-  // 生成摘要 - 移除所有markdown语法
-  const excerpt =
-    data.excerpt ||
-    content
+  return (
+    markdown
       .replace(/^#+\s+.+$/gm, "") // 移除标题
       .replace(/```[\s\S]*?```/g, "") // 移除代码块
       .replace(/`[^`]+`/g, "") // 移除行内代码
@@ -78,40 +49,83 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       .replace(/\n+/g, " ") // 换行转空格
       .replace(/\s+/g, " ") // 多空格合并
       .trim()
-      .slice(0, 200) + "...";
-
-  return {
-    slug,
-    title: data.title || slug,
-    date: data.date
-      ? new Date(data.date).toISOString()
-      : new Date().toISOString(),
-    excerpt,
-    tags: data.tags || [],
-    categories: data.categories || [],
-    preview: data.preview,
-    top: data.top || false,
-    readingTime: stats.text,
-    content: contentHtml,
-  };
+      .slice(0, 200) + "..."
+  );
 }
 
-// 获取所有文章（带分页）
-export async function getAllPosts(
-  page: number = 1,
-  limit: number = 10
-): Promise<{ posts: PostMeta[]; total: number; totalPages: number }> {
-  const slugs = getPostSlugs();
-  const allPosts: PostMeta[] = [];
-
-  for (const slug of slugs) {
-    const post = await getPostBySlug(slug);
-    if (post) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { content, ...meta } = post;
-      allPosts.push(meta);
-    }
+// 确保目录存在
+function ensurePostsDirectory() {
+  if (!fs.existsSync(postsDirectory)) {
+    fs.mkdirSync(postsDirectory, { recursive: true });
   }
+}
+
+const readPostFile = cache(
+  async (
+    slug: string
+  ): Promise<{ data: Record<string, unknown>; markdown: string } | null> => {
+    ensurePostsDirectory();
+    const fullPath = path.join(postsDirectory, `${slug}.md`);
+
+    if (!fs.existsSync(fullPath)) {
+      return null;
+    }
+
+    const fileContents = await fs.promises.readFile(fullPath, "utf8");
+    const { data, content } = matter(fileContents);
+    return { data: data as Record<string, unknown>, markdown: content };
+  }
+);
+
+// 获取所有文章的slug
+export function getPostSlugs(): string[] {
+  ensurePostsDirectory();
+  const files = fs.readdirSync(postsDirectory);
+  return files
+    .filter((file) => file.endsWith(".md"))
+    .map((file) => file.replace(/\.md$/, ""));
+}
+
+export const getPostMetaBySlug = cache(
+  async (slug: string): Promise<PostMeta | null> => {
+    const file = await readPostFile(slug);
+    if (!file) return null;
+
+    const { data, markdown } = file;
+    const stats = readingTime(markdown);
+
+    return {
+      slug,
+      title: (data.title as string | undefined) || slug,
+      date: normalizeDate(data.date as string | undefined),
+      excerpt: buildExcerpt(markdown, data.excerpt as string | undefined),
+      tags: (data.tags as string[] | undefined) || [],
+      categories: (data.categories as string[] | undefined) || [],
+      preview: data.preview as string | undefined,
+      top: (data.top as boolean | undefined) || false,
+      readingTime: stats.text,
+    };
+  }
+);
+
+// 根据slug获取文章数据（包含 HTML 正文）
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const file = await readPostFile(slug);
+  if (!file) return null;
+
+  const meta = await getPostMetaBySlug(slug);
+  if (!meta) return null;
+
+  const processedContent = await remark().use(html).process(file.markdown);
+  const contentHtml = processedContent.toString();
+
+  return { ...meta, content: contentHtml };
+}
+
+const getAllPostsMetaSorted = cache(async (): Promise<PostMeta[]> => {
+  const slugs = getPostSlugs();
+  const metas = await Promise.all(slugs.map((slug) => getPostMetaBySlug(slug)));
+  const allPosts = metas.filter(Boolean) as PostMeta[];
 
   // 按日期排序，置顶文章优先
   allPosts.sort((a, b) => {
@@ -120,6 +134,15 @@ export async function getAllPosts(
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
+  return allPosts;
+});
+
+// 获取所有文章（带分页）
+export async function getAllPosts(
+  page: number = 1,
+  limit: number = 10
+): Promise<{ posts: PostMeta[]; total: number; totalPages: number }> {
+  const allPosts = await getAllPostsMetaSorted();
   const total = allPosts.length;
   const totalPages = Math.ceil(total / limit);
   const start = (page - 1) * limit;
@@ -132,17 +155,14 @@ export async function getAllPosts(
 export async function getAllTags(): Promise<
   { name: string; count: number }[]
 > {
-  const slugs = getPostSlugs();
+  const posts = await getAllPostsMetaSorted();
   const tagCount: Record<string, number> = {};
 
-  for (const slug of slugs) {
-    const post = await getPostBySlug(slug);
-    if (post) {
-      post.tags.forEach((tag) => {
-        tagCount[tag] = (tagCount[tag] || 0) + 1;
-      });
-    }
-  }
+  posts.forEach((post) => {
+    post.tags.forEach((tag) => {
+      tagCount[tag] = (tagCount[tag] || 0) + 1;
+    });
+  });
 
   return Object.entries(tagCount)
     .map(([name, count]) => ({ name, count }))
@@ -151,7 +171,7 @@ export async function getAllTags(): Promise<
 
 // 根据标签获取文章
 export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
-  const { posts } = await getAllPosts(1, 1000);
+  const posts = await getAllPostsMetaSorted();
   return posts.filter((post) => post.tags.includes(tag));
 }
 
@@ -159,7 +179,7 @@ export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
 export async function getArchives(): Promise<
   { year: string; months: { month: string; posts: PostMeta[] }[] }[]
 > {
-  const { posts } = await getAllPosts(1, 1000);
+  const posts = await getAllPostsMetaSorted();
 
   const archiveMap: Record<string, Record<string, PostMeta[]>> = {};
 
@@ -185,13 +205,13 @@ export async function getArchives(): Promise<
 
 // 获取最新文章
 export async function getRecentPosts(limit: number = 5): Promise<PostMeta[]> {
-  const { posts } = await getAllPosts(1, limit);
-  return posts;
+  const posts = await getAllPostsMetaSorted();
+  return posts.slice(0, limit);
 }
 
 // 获取随机文章
 export async function getRandomPosts(limit: number = 5): Promise<PostMeta[]> {
-  const { posts } = await getAllPosts(1, 1000);
+  const posts = await getAllPostsMetaSorted();
   const shuffled = [...posts].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, limit);
 }

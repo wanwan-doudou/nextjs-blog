@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Pin } from "lucide-react";
@@ -12,15 +13,25 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
-  // 生成随机封面图
-  const getRandomCover = () => {
+  const stableIndex = (input: string, modulo: number) => {
+    if (modulo <= 0) return 0;
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
+    }
+    return hash % modulo;
+  };
+
+  // 生成稳定封面图（避免每次渲染都换图 + 便于浏览器缓存）
+  const getCover = () => {
     if (post.preview) return post.preview;
     const apis = siteConfig.defaultPreview.apiUrls;
-    const randomApi = apis[Math.floor(Math.random() * apis.length)];
-    return `${randomApi}?slug=${post.slug}`;
+    const api = apis[stableIndex(post.slug, apis.length)] ?? apis[0];
+    return `${api}?slug=${encodeURIComponent(post.slug)}`;
   };
 
   const postUrl = `/posts/${encodeURIComponent(post.slug)}`;
+  const coverUrl = getCover();
 
   return (
     <Link href={postUrl} className="block">
@@ -28,9 +39,13 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex flex-col md:flex-row">
           {/* 封面图 */}
           <div className="md:w-64 h-48 md:h-auto relative overflow-hidden flex-shrink-0">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-              style={{ backgroundImage: `url(${getRandomCover()})` }}
+            <Image
+              src={coverUrl}
+              alt={`${post.title} 封面`}
+              fill
+              sizes="(max-width: 768px) 100vw, 256px"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/50" />
             {post.top && (

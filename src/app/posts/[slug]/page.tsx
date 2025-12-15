@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPostSlugs } from "@/lib/posts";
+import { getPostBySlug, getPostMetaBySlug, getPostSlugs } from "@/lib/posts";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -19,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostMetaBySlug(decodeURIComponent(slug));
   if (!post) return { title: "文章未找到" };
   return {
     title: post.title,
