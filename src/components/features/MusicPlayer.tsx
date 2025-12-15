@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
 import Script from "next/script";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,28 +8,27 @@ import { Music } from "lucide-react";
 
 export function MusicPlayer() {
   const [mounted, setMounted] = useState(false);
-  const [scriptsLoaded, setScriptsLoaded] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-    
+
     // 加载 APlayer CSS
     if (siteConfig.musicPlayer.enable) {
-      const cssLink = document.createElement("link");
-      cssLink.rel = "stylesheet";
-      cssLink.href = "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css";
-      document.head.appendChild(cssLink);
+      const existing = document.querySelector(
+        'link[data-aplayer-css="true"]',
+      ) as HTMLLinkElement | null;
+      if (!existing) {
+        const cssLink = document.createElement("link");
+        cssLink.rel = "stylesheet";
+        cssLink.href =
+          "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css";
+        cssLink.setAttribute("data-aplayer-css", "true");
+        document.head.appendChild(cssLink);
+      }
     }
   }, []);
 
-  useEffect(() => {
-    // 当两个脚本都加载完成时，初始化播放器
-    if (scriptsLoaded >= 2) {
-      initPlayer();
-    }
-  }, [scriptsLoaded]);
-
-  const initPlayer = () => {
+  const initPlayer = useCallback(() => {
     const container = document.getElementById("meting-container");
     if (!container || container.children.length > 0) return;
 
@@ -48,7 +47,23 @@ export function MusicPlayer() {
     metingEl.setAttribute("fixed", "false");
 
     container.appendChild(metingEl);
-  };
+  }, []);
+
+  const ensureInit = useCallback(() => {
+    if (!siteConfig.musicPlayer.enable) return;
+    if (typeof window === "undefined") return;
+
+    const hasAPlayer = Boolean((window as unknown as { APlayer?: unknown }).APlayer);
+    const hasMeting = Boolean(customElements.get("meting-js"));
+    if (hasAPlayer && hasMeting) {
+      initPlayer();
+    }
+  }, [initPlayer]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    ensureInit();
+  }, [mounted, ensureInit]);
 
   if (!siteConfig.musicPlayer.enable || !mounted) return null;
 
@@ -68,14 +83,16 @@ export function MusicPlayer() {
         </CardContent>
       </Card>
       <Script
+        id="aplayer-script"
         src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"
         strategy="lazyOnload"
-        onLoad={() => setScriptsLoaded((prev) => prev + 1)}
+        onReady={ensureInit}
       />
       <Script
+        id="meting-script"
         src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"
         strategy="lazyOnload"
-        onLoad={() => setScriptsLoaded((prev) => prev + 1)}
+        onReady={ensureInit}
       />
     </>
   );
