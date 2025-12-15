@@ -8,7 +8,7 @@ export function PersonalLinks() {
   }
 
   return (
-    <Card className="bg-black/50 backdrop-blur-md border-white/10 text-white">
+    <Card className="bg-transparent border-white/10 text-white shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <LinkIcon className="w-4 h-4 text-cyan-400" />
@@ -23,7 +23,7 @@ export function PersonalLinks() {
                 href={link.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-white/80 hover:text-cyan-400 transition-colors flex items-center gap-2"
+                className="text-sm text-white hover:text-cyan-400 transition-colors flex items-center gap-2"
               >
                 {link.name.toLowerCase().includes("github") && (
                   <Github className="w-4 h-4" />

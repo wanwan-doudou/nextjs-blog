@@ -32,12 +32,12 @@ export default async function TagPage({ params }: PageProps) {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* 主内容区 */}
         <div className="flex-1">
-          <Card className="bg-black/50 backdrop-blur-md border-white/10 mb-6">
+          <Card className="bg-transparent border-white/10 shadow-none mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Tag className="w-5 h-5 text-cyan-400" />
                 标签: {decodedTag}
-                <span className="text-sm font-normal text-white/60">
+                <span className="text-sm font-normal text-white">
                   ({posts.length} 篇文章)
                 </span>
               </CardTitle>
@@ -45,8 +45,8 @@ export default async function TagPage({ params }: PageProps) {
           </Card>
 
           {posts.length === 0 ? (
-            <div className="bg-black/50 backdrop-blur-md border border-white/10 rounded-lg p-8 text-center">
-              <p className="text-white/70">暂无文章</p>
+            <div className="bg-transparent border border-white/10 rounded-lg p-8 text-center">
+              <p className="text-white">暂无文章</p>
             </div>
           ) : (
             <div className="space-y-6">

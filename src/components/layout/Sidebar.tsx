@@ -5,12 +5,14 @@ import { RecentPosts } from "@/components/sidebar/RecentPosts";
 import { HotTags } from "@/components/sidebar/HotTags";
 import { FriendLinks } from "@/components/sidebar/FriendLinks";
 import { PersonalLinks } from "@/components/sidebar/PersonalLinks";
+import { MusicPlayer } from "@/components/features/MusicPlayer";
 
 export function Sidebar() {
   return (
     <aside className="w-full lg:w-80 space-y-4">
       <SearchBox />
       <AuthorCard />
+      <MusicPlayer />
       
       {siteConfig.sidebar.recentPosts && <RecentPosts />}
       {siteConfig.sidebar.tags && <HotTags />}

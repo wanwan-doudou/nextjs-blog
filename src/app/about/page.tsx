@@ -16,7 +16,7 @@ export default function AboutPage() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* 主内容区 */}
         <div className="flex-1">
-          <Card className="bg-black/50 backdrop-blur-md border-white/10">
+          <Card className="bg-transparent border-white/10 shadow-none">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <User className="w-5 h-5 text-cyan-400" />
@@ -39,7 +39,7 @@ export default function AboutPage() {
                   <h2 className="text-2xl font-bold text-white mb-2">
                     {siteConfig.author}
                   </h2>
-                  <p className="text-white/70">{siteConfig.description}</p>
+                  <p className="text-white">{siteConfig.description}</p>
                 </div>
               </div>
 
@@ -53,7 +53,7 @@ export default function AboutPage() {
                       href={link.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-cyan-500/30 rounded-lg text-white/80 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-cyan-500/30 rounded-lg text-white hover:text-cyan-400 transition-colors"
                     >
                       {link.name.toLowerCase().includes("github") && (
                         <Github className="w-4 h-4" />

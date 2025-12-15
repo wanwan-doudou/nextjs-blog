@@ -24,7 +24,7 @@ export function PostCard({ post }: PostCardProps) {
 
   return (
     <Link href={postUrl} className="block">
-      <Card className="bg-black/50 backdrop-blur-md border-white/10 overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 cursor-pointer">
+      <Card className="bg-transparent border-white/10 overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 cursor-pointer shadow-none">
         <div className="flex flex-col md:flex-row">
           {/* 封面图 */}
           <div className="md:w-64 h-48 md:h-auto relative overflow-hidden flex-shrink-0">
@@ -49,7 +49,7 @@ export function PostCard({ post }: PostCardProps) {
               <h2 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-2">
                 {post.title}
               </h2>
-              <div className="flex flex-wrap items-center gap-3 text-sm text-white/60">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-white">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   {format(new Date(post.date), "yyyy-MM-dd", { locale: zhCN })}
@@ -61,7 +61,7 @@ export function PostCard({ post }: PostCardProps) {
               </div>
             </CardHeader>
             <CardContent className="flex-1">
-              <p className="text-white/70 text-sm line-clamp-3">{post.excerpt}</p>
+              <p className="text-white text-sm line-clamp-3">{post.excerpt}</p>
             </CardContent>
             <div className="px-6 pb-4">
               <div className="flex flex-wrap gap-2">
@@ -69,7 +69,7 @@ export function PostCard({ post }: PostCardProps) {
                   <Badge
                     key={tag}
                     variant="secondary"
-                    className="bg-white/10 text-white/80 text-xs"
+                    className="bg-white/10 text-white text-xs"
                   >
                     {tag}
                   </Badge>

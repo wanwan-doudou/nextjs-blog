@@ -13,9 +13,9 @@ export default async function Home() {
         {/* 主内容区 */}
         <div className="flex-1">
           {posts.length === 0 ? (
-            <div className="bg-black/50 backdrop-blur-md border border-white/10 rounded-lg p-8 text-center">
-              <p className="text-white/70 text-lg">暂无文章</p>
-              <p className="text-white/50 text-sm mt-2">
+            <div className="bg-transparent border border-white/10 rounded-lg p-8 text-center">
+              <p className="text-white text-lg">暂无文章</p>
+              <p className="text-white text-sm mt-2">
                 请在 content/posts 目录下添加 Markdown 文章
               </p>
             </div>

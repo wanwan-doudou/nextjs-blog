@@ -18,7 +18,7 @@ export function SearchBox() {
   };
 
   return (
-    <Card className="bg-black/50 backdrop-blur-md border-white/10">
+    <Card className="bg-transparent border-white/10 shadow-none">
       <CardContent className="p-3">
         <form onSubmit={handleSearch} className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />

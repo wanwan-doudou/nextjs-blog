@@ -56,7 +56,7 @@ export default function WallpaperPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Card className="bg-black/50 backdrop-blur-md border-white/10">
+      <Card className="bg-transparent border-white/10 shadow-none">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-white">
             <ImageIcon className="w-5 h-5 text-cyan-400" />

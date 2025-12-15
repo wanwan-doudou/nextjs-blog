@@ -5,9 +5,9 @@ import { Quote } from "lucide-react";
 
 export function AuthorCard() {
   return (
-    <Card className="bg-black/50 backdrop-blur-md border-white/10 text-white">
+    <Card className="bg-transparent border-white/10 text-white shadow-none">
       <CardHeader className="text-center pb-2">
-        <div className="flex items-center justify-center gap-2 text-sm text-white/80">
+        <div className="flex items-center justify-center gap-2 text-sm text-white">
           <Quote className="w-4 h-4 rotate-180" />
           <span>{siteConfig.author}</span>
           <Quote className="w-4 h-4" />
@@ -20,7 +20,7 @@ export function AuthorCard() {
             {siteConfig.author.charAt(0)}
           </AvatarFallback>
         </Avatar>
-        <p className="mt-4 text-sm text-white/70 text-center">
+        <p className="mt-4 text-sm text-white text-center">
           {siteConfig.description}
         </p>
       </CardContent>
