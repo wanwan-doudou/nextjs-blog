@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -82,10 +83,12 @@ export default function WallpaperPage() {
                 className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
                 onClick={() => setSelectedImage(url)}
               >
-                <img
+                <Image
                   src={url}
                   alt={`壁纸 ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -134,9 +137,12 @@ export default function WallpaperPage() {
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-5xl w-full">
-            <img
+            <Image
               src={selectedImage}
               alt="壁纸预览"
+              width={1920}
+              height={1080}
+              sizes="(max-width: 768px) 100vw, 80vw"
               className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
             />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
