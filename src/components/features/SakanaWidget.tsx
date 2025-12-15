@@ -28,7 +28,7 @@ export function SakanaWidget() {
     <>
       <div
         id="sakana-widget"
-        className="fixed z-30"
+        className="sakana-widget fixed z-30"
         style={{
           bottom: position.bottom,
           right: position.right,
