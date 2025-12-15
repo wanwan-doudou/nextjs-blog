@@ -183,3 +183,100 @@
 .prose-gal hr {
   @apply my-8 border-white/20;
 }
+
+/* APlayer 透明样式 */
+.aplayer-transparent .aplayer {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.aplayer-transparent .aplayer-body {
+  background: transparent !important;
+}
+
+.aplayer-transparent .aplayer-info {
+  background: transparent !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.aplayer-transparent .aplayer-info .aplayer-music {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-info .aplayer-music .aplayer-title {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-info .aplayer-music .aplayer-author {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.aplayer-transparent .aplayer-lrc {
+  background: transparent !important;
+}
+
+.aplayer-transparent .aplayer-lrc::before,
+.aplayer-transparent .aplayer-lrc::after {
+  display: none !important;
+}
+
+.aplayer-transparent .aplayer-list {
+  background: transparent !important;
+}
+
+.aplayer-transparent .aplayer-list ol li {
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.aplayer-transparent .aplayer-list ol li:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.aplayer-transparent .aplayer-list ol li.aplayer-list-light {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.aplayer-transparent .aplayer-list ol li .aplayer-list-title {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-list ol li .aplayer-list-author {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.aplayer-transparent .aplayer-list ol li .aplayer-list-index {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-lrc p {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-lrc p.aplayer-lrc-current {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-controller .aplayer-time {
+  color: #fff !important;
+}
+
+.aplayer-transparent .aplayer-controller .aplayer-time .aplayer-icon {
+  filter: invert(1) !important;
+  opacity: 0.8 !important;
+}
+
+.aplayer-transparent .aplayer-controller .aplayer-time .aplayer-icon:hover {
+  opacity: 1 !important;
+}
+
+.aplayer-transparent .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.aplayer-transparent .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.aplayer-transparent .aplayer-miniswitcher {
+  display: none !important;
+}

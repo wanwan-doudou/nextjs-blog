@@ -13,7 +13,7 @@ export async function HotTags() {
   }
 
   return (
-    <Card className="bg-black/50 backdrop-blur-md border-white/10 text-white">
+    <Card className="bg-transparent border-white/10 text-white shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Tags className="w-4 h-4 text-pink-400" />
@@ -26,7 +26,7 @@ export async function HotTags() {
             <Link key={tag.name} href={`/tags/${encodeURIComponent(tag.name)}`}>
               <Badge
                 variant="secondary"
-                className="bg-white/10 hover:bg-cyan-500/30 text-white/80 hover:text-white transition-colors cursor-pointer"
+                className="bg-white/10 hover:bg-cyan-500/30 text-white hover:text-cyan-400 transition-colors cursor-pointer"
               >
                 {tag.name} ({tag.count})
               </Badge>

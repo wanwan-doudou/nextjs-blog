@@ -8,7 +8,7 @@ export function FriendLinks() {
   }
 
   return (
-    <Card className="bg-black/50 backdrop-blur-md border-white/10 text-white">
+    <Card className="bg-transparent border-white/10 text-white shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Heart className="w-4 h-4 text-red-400" />
@@ -23,7 +23,7 @@ export function FriendLinks() {
                 href={link.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-white/80 hover:text-cyan-400 transition-colors"
+                className="text-sm text-white hover:text-cyan-400 transition-colors"
               >
                 {link.name}
               </a>

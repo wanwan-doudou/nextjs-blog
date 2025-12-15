@@ -41,10 +41,10 @@ export default async function PostPage({ params }: PageProps) {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* 主内容区 */}
         <div className="flex-1">
-          <Card className="bg-black/50 backdrop-blur-md border-white/10">
+          <Card className="bg-transparent border-white/10 shadow-none">
             <CardHeader className="space-y-4">
               {/* 面包屑 */}
-              <nav className="flex items-center gap-2 text-sm text-white/60">
+              <nav className="flex items-center gap-2 text-sm text-white">
                 <Link
                   href="/"
                   className="flex items-center gap-1 hover:text-cyan-400 transition-colors"
@@ -53,7 +53,7 @@ export default async function PostPage({ params }: PageProps) {
                   首页
                 </Link>
                 <ChevronRight className="w-4 h-4" />
-                <span className="text-white/80 line-clamp-1">{post.title}</span>
+                <span className="text-white line-clamp-1">{post.title}</span>
               </nav>
 
               {/* 标题 */}
@@ -62,7 +62,7 @@ export default async function PostPage({ params }: PageProps) {
               </h1>
 
               {/* 元信息 */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-white">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   {format(new Date(post.date), "yyyy年MM月dd日", {
@@ -83,7 +83,7 @@ export default async function PostPage({ params }: PageProps) {
                       >
                         <Badge
                           variant="secondary"
-                          className="bg-white/10 hover:bg-cyan-500/30 text-white/80 hover:text-white transition-colors cursor-pointer"
+                          className="bg-white/10 hover:bg-cyan-500/30 text-white hover:text-cyan-400 transition-colors cursor-pointer"
                         >
                           {tag}
                         </Badge>

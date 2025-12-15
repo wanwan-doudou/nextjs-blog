@@ -1,21 +1,18 @@
 // 站点配置 - 参考原 gal 主题 _config.yml
 export const siteConfig = {
-  // 基础信息
-  title: "Gal Blog",
-  description: "一个使用 Next.js 重构的博客",
-  author: "Author",
+  // ==================== 基础信息 ====================
+  title: "这个爱酱不太聪明",
+  description: "技术宅改变世界",
+  author: "这个爱酱不太聪明",
   url: "https://example.com",
 
-  // Logo配置
+  // ==================== Logo与头像 ====================
   useLogo: false,
   logoImage: "",
-  navbarText: "Gal Blog",
+  navbarText: "这个爱酱不太聪明",
+  authorImage: "/images/avatar.jpg",
 
-  // 背景图配置
-  xsBgImage: "https://t.alcy.cc/ycy",
-  authorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=gal",
-
-  // 导航菜单
+  // ==================== 导航菜单 ====================
   menu: [
     { title: "首页", icon: "Home", url: "/" },
     { title: "归档", icon: "Archive", url: "/archives" },
@@ -23,7 +20,8 @@ export const siteConfig = {
     { title: "关于我", icon: "User", url: "/about" },
   ],
 
-  // 默认封面图API
+  // ==================== 图片API配置 ====================
+  // 文章封面图
   defaultPreview: {
     useApi: true,
     apiUrls: [
@@ -35,7 +33,37 @@ export const siteConfig = {
     ],
   },
 
-  // 侧边栏配置
+  // 背景轮播图
+  slideBackground: {
+    useApi: true,
+    apiCount: 6,
+    apiUrls: [
+      "https://t.alcy.cc/ycy",
+      "https://t.alcy.cc/ysz",
+      "https://t.alcy.cc/pc",
+      "https://t.alcy.cc/moe",
+      "https://t.alcy.cc/fj",
+      "https://t.alcy.cc/bd",
+      "https://t.alcy.cc/ys",
+    ],
+  },
+
+  // 壁纸页面
+  wallpaper: {
+    pcApiUrls: [
+      "https://t.alcy.cc/ycy",
+      "https://t.alcy.cc/ysz",
+      "https://t.alcy.cc/pc",
+      "https://t.alcy.cc/moe",
+      "https://t.alcy.cc/fj",
+      "https://t.alcy.cc/bd",
+      "https://t.alcy.cc/ys",
+    ],
+    batchSize: 12,
+    maxImages: 120,
+  },
+
+  // ==================== 侧边栏配置 ====================
   sidebar: {
     recentPosts: true,
     randomPosts: true,
@@ -56,40 +84,17 @@ export const siteConfig = {
     { name: "知乎", link: "https://www.zhihu.com/" },
   ],
 
-  // 背景轮播配置
-  slideBackground: {
-    useApi: true,
-    apiCount: 6,
-    apiUrls: [
-      "https://t.alcy.cc/ycy",
-      "https://t.alcy.cc/ysz",
-      "https://t.alcy.cc/pc",
-      "https://t.alcy.cc/moe",
-      "https://t.alcy.cc/fj",
-      "https://t.alcy.cc/bd",
-      "https://t.alcy.cc/ys",
-    ],
-  },
-
-  // 壁纸页面配置
-  wallpaper: {
-    pcApiUrls: [
-      "https://t.alcy.cc/ycy",
-      "https://t.alcy.cc/ysz",
-      "https://t.alcy.cc/pc",
-      "https://t.alcy.cc/moe",
-      "https://t.alcy.cc/fj",
-    ],
-    batchSize: 12,
-    maxImages: 120,
-  },
-
+  // ==================== 功能配置 ====================
   // 代码高亮主题
   highlightTheme: "atom-one-dark",
 
-  // 音乐播放器配置
+  // 分页配置
+  postsPerPage: 10,
+
+  // ==================== 小组件配置 ====================
+  // 音乐播放器
   musicPlayer: {
-    enable: false,
+    enable: true,
     title: "歌单",
     playlistId: "8692231711",
     server: "tencent",
@@ -98,7 +103,7 @@ export const siteConfig = {
     theme: "#cc543a",
   },
 
-  // 看板娘配置
+  // 看板娘
   sakanaWidget: {
     enable: true,
     position: {
@@ -106,9 +111,6 @@ export const siteConfig = {
       right: "10px",
     },
   },
-
-  // 分页配置
-  postsPerPage: 10,
 };
 
 export type SiteConfig = typeof siteConfig;

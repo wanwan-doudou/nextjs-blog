@@ -17,7 +17,7 @@ export default async function ArchivesPage() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* 主内容区 */}
         <div className="flex-1">
-          <Card className="bg-black/50 backdrop-blur-md border-white/10">
+          <Card className="bg-transparent border-white/10 shadow-none">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Archive className="w-5 h-5 text-cyan-400" />
@@ -26,7 +26,7 @@ export default async function ArchivesPage() {
             </CardHeader>
             <CardContent>
               {archives.length === 0 ? (
-                <p className="text-white/60">暂无文章</p>
+                <p className="text-white">暂无文章</p>
               ) : (
                 <div className="space-y-8">
                   {archives.map((yearGroup) => (
@@ -38,7 +38,7 @@ export default async function ArchivesPage() {
                       <div className="space-y-4">
                         {yearGroup.months.map((monthGroup) => (
                           <div key={monthGroup.month} className="pl-4">
-                            <h3 className="text-lg font-semibold text-white/80 mb-2">
+                            <h3 className="text-lg font-semibold text-white mb-2">
                               {monthGroup.month}月
                             </h3>
                             <ul className="space-y-2 pl-4 border-l border-white/20">
@@ -47,9 +47,9 @@ export default async function ArchivesPage() {
                                   <div className="absolute -left-[9px] top-2 w-2 h-2 bg-cyan-400 rounded-full" />
                                   <Link
                                     href={`/posts/${post.slug}`}
-                                    className="block pl-4 py-1 text-white/70 hover:text-cyan-400 transition-colors"
+                                    className="block pl-4 py-1 text-white hover:text-cyan-400 transition-colors"
                                   >
-                                    <span className="text-sm text-white/50 mr-2">
+                                    <span className="text-sm text-white mr-2">
                                       {new Date(post.date).getDate()}日
                                     </span>
                                     {post.title}
