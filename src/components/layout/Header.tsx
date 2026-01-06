@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Archive, Image, User, Menu, X } from "lucide-react";
+import { Home, Archive, Image, User, Menu, X, Link as LinkIcon } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Archive,
   Image,
   User,
+  Link: LinkIcon,
 };
 
 export function Header() {

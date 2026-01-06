@@ -122,6 +122,23 @@ export const siteConfig = {
         },
       ],
     },
+    {
+      title: "精美壁纸",
+      items: [
+        {
+          name: "anime pictures",
+          desc: "全年龄的动漫图片和壁纸！",
+          link: "https://anime-pictures.net/",
+          icon: "https://anime-pictures.net/favicon.ico",
+        },
+        {
+          name: "pixiv",
+          desc: "全年龄的动漫图片和壁纸！",
+          link: "https://www.pixiv.net/",
+          icon: "https://www.pixiv.net/favicon.ico",
+        }
+      ],
+    },
   ],
 
   // ==================== 功能配置 ====================
