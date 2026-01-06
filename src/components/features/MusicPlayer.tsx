@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
 import Script from "next/script";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,59 +11,7 @@ export function MusicPlayer() {
 
   useEffect(() => {
     setMounted(true);
-
-    // 加载 APlayer CSS
-    if (siteConfig.musicPlayer.enable) {
-      const existing = document.querySelector(
-        'link[data-aplayer-css="true"]',
-      ) as HTMLLinkElement | null;
-      if (!existing) {
-        const cssLink = document.createElement("link");
-        cssLink.rel = "stylesheet";
-        cssLink.href =
-          "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css";
-        cssLink.setAttribute("data-aplayer-css", "true");
-        document.head.appendChild(cssLink);
-      }
-    }
   }, []);
-
-  const initPlayer = useCallback(() => {
-    const container = document.getElementById("meting-container");
-    if (!container || container.children.length > 0) return;
-
-    const { playlistId, server, autoplay, volume, theme } = siteConfig.musicPlayer;
-
-    // 创建 meting-js 元素
-    const metingEl = document.createElement("meting-js");
-    metingEl.setAttribute("server", server);
-    metingEl.setAttribute("type", "playlist");
-    metingEl.setAttribute("id", playlistId);
-    metingEl.setAttribute("autoplay", autoplay ? "true" : "false");
-    metingEl.setAttribute("theme", theme);
-    metingEl.setAttribute("volume", volume.toString());
-    metingEl.setAttribute("order", "list");
-    metingEl.setAttribute("list-folded", "false");
-    metingEl.setAttribute("fixed", "false");
-
-    container.appendChild(metingEl);
-  }, []);
-
-  const ensureInit = useCallback(() => {
-    if (!siteConfig.musicPlayer.enable) return;
-    if (typeof window === "undefined") return;
-
-    const hasAPlayer = Boolean((window as unknown as { APlayer?: unknown }).APlayer);
-    const hasMeting = Boolean(customElements.get("meting-js"));
-    if (hasAPlayer && hasMeting) {
-      initPlayer();
-    }
-  }, [initPlayer]);
-
-  useEffect(() => {
-    if (!mounted) return;
-    ensureInit();
-  }, [mounted, ensureInit]);
 
   if (!siteConfig.musicPlayer.enable || !mounted) return null;
 
@@ -78,21 +26,26 @@ export function MusicPlayer() {
         </CardHeader>
         <CardContent>
           <div className="w-full rounded-lg overflow-hidden">
-            <div id="meting-container" className="aplayer-transparent" />
+            <meting-js
+              id={siteConfig.musicPlayer.playlistId}
+              server={siteConfig.musicPlayer.server}
+              type="playlist"
+              fixed="false"
+              autoplay={siteConfig.musicPlayer.autoplay}
+              loop="all"
+              order="list"
+              preload="auto"
+              list-folded="true"
+              list-max-height="340px"
+              lrc-type="0"
+              class="aplayer-transparent"
+            />
           </div>
         </CardContent>
       </Card>
       <Script
-        id="aplayer-script"
-        src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"
-        strategy="lazyOnload"
-        onReady={ensureInit}
-      />
-      <Script
-        id="meting-script"
         src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"
         strategy="lazyOnload"
-        onReady={ensureInit}
       />
     </>
   );

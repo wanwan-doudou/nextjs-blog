@@ -1,0 +1,204 @@
+{
+  "main": {
+    "id": "2928c74ea9a2ee13",
+    "type": "split",
+    "children": [
+      {
+        "id": "4fcabef72efee75d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6acba0731b51a4ba",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Python3-推导式.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Python3-推导式"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e256fd1f4401ac39",
+    "type": "split",
+    "children": [
+      {
+        "id": "932a79ef19dc890e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8103491997c7274a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "927f830dbe4eb298",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "020c9b7b7c2d994d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a474585d3c4e8bb2",
+    "type": "split",
+    "children": [
+      {
+        "id": "7eff3800d621738b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8ba424d04b839840",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Python3-推导式.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Python3-推导式 的反向链接列表"
+            }
+          },
+          {
+            "id": "7b885e39a32e1816",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Python3-推导式.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Python3-推导式 的出链列表"
+            }
+          },
+          {
+            "id": "746e796abc2c1fd2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "7587d21eb8e9fa49",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "60aefe4b5946c222",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Python3-推导式.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Python3-推导式 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:创建新数据库": false
+    }
+  },
+  "active": "6acba0731b51a4ba",
+  "lastOpenFiles": [
+    "NET8分布式工业控制系统架构设计.md",
+    "NET8程序集动态加载机制.md",
+    "TimescaleDB智能降采样实现.md",
+    "NET实现JWT与Redis单点登录控制.md",
+    "NET日志系统缓冲批量写入设计.md",
+    "NET-WebSocket实时通知服务设计.md",
+    "NET-Redis工具类封装实践.md",
+    "NET8模块化初始化架构设计.md",
+    "Python3-运算符.md",
+    "Python3-字符串.md",
+    "Python3-基础语法.md",
+    "命令模式.md",
+    "解决-Python-异步-Socket-服务器消息堆积问题.md",
+    "基于layui表格的树形扩展.md",
+    "让hexo在后台运行.md"
+  ]
+}

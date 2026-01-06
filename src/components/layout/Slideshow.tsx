@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 
 export function Slideshow() {
-  const [images, setImages] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -22,7 +21,6 @@ export function Slideshow() {
   const [layer0AnimKey, setLayer0AnimKey] = useState(0);
   const [layer1AnimKey, setLayer1AnimKey] = useState(0);
 
-  const currentIndexRef = useRef(0);
   const activeLayerRef = useRef<0 | 1>(0);
   const incomingLayerRef = useRef<0 | 1 | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -42,44 +40,31 @@ export function Slideshow() {
 
   useEffect(() => {
     if (!isDesktop) return;
-    const { apiUrls, apiCount } = siteConfig.slideBackground;
-    const generatedImages: string[] = [];
+    const { apiUrls } = siteConfig.slideBackground;
 
-    const shuffled = [...apiUrls].sort(() => Math.random() - 0.5);
-    for (let i = 0; i < apiCount; i++) {
-      const api = shuffled[i % shuffled.length];
-      if (api) generatedImages.push(api);
-    }
+    // Initial load
+    const getRandomImage = () => {
+      const api = apiUrls[Math.floor(Math.random() * apiUrls.length)];
+      return `${api}${api.includes("?") ? "&" : "?"}t=${Date.now()}`;
+    };
 
-    setImages(generatedImages);
+    setLayer0Src(getRandomImage());
+    setLayer1Src(getRandomImage());
+    setLayer0AnimKey((v) => v + 1);
     setLoaded(true);
   }, [isDesktop]);
 
   useEffect(() => {
-    if (images.length === 0) return;
-
-    currentIndexRef.current = 0;
-    setActiveLayer(0);
-    setIncomingLayer(null);
-    setFading(false);
-
-    setLayer0Src(images[0] ?? null);
-    setLayer1Src(images.length > 1 ? images[1]! : images[0] ?? null);
-    setLayer0AnimKey((v) => v + 1);
-    setLayer1AnimKey((v) => v + 1);
-  }, [images]);
-
-  useEffect(() => {
-    if (images.length === 0) return;
+    if (!loaded || !isDesktop) return;
 
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
 
-    const preloadAndTransition = (fromIndex: number) => {
+    const preloadAndTransition = () => {
       if (incomingLayerRef.current !== null) return;
-      const toIndex = (fromIndex + 1) % images.length;
-      const src = images[toIndex];
-      if (!src) return;
+      const { apiUrls } = siteConfig.slideBackground;
+      const api = apiUrls[Math.floor(Math.random() * apiUrls.length)];
+      const src = `${api}${api.includes("?") ? "&" : "?"}t=${Date.now()}`;
 
       const img = new window.Image();
       img.decoding = "async";
@@ -100,7 +85,6 @@ export function Slideshow() {
 
         transitionTimeoutRef.current = setTimeout(() => {
           cancelAnimationFrame(rafId);
-          currentIndexRef.current = toIndex;
           setActiveLayer(nextLayer);
           setIncomingLayer(null);
           setFading(false);
@@ -109,16 +93,16 @@ export function Slideshow() {
     };
 
     intervalRef.current = setInterval(() => {
-      preloadAndTransition(currentIndexRef.current);
+      preloadAndTransition();
     }, intervalMs);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
     };
-  }, [images, intervalMs, fadeMs]);
+  }, [loaded, isDesktop, intervalMs, fadeMs]);
 
-  if (!isDesktop || !loaded || images.length === 0) {
+  if (!isDesktop || !loaded || (!layer0Src && !layer1Src)) {
     return (
       <div className="fixed inset-0 -z-10 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900" />
     );
