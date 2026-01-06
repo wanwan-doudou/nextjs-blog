@@ -19,6 +19,7 @@ declare namespace JSX {
         "list-folded"?: string;
         "list-max-height"?: string;
         "storage-name"?: string;
+        class?: string;
       },
       HTMLElement
     >;
