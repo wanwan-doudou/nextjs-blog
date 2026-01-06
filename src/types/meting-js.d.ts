@@ -3,16 +3,16 @@ declare namespace JSX {
     "meting-js": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement> & {
         id?: string;
-        server?: "netease" | "tencent" | "kugou" | "xiami" | "baidu";
-        type?: "song" | "playlist" | "album" | "search" | "artist";
+        server?: string;
+        type?: string;
         auto?: string;
         fixed?: string;
         mini?: string;
         autoplay?: string | boolean;
         theme?: string;
-        loop?: "all" | "one" | "none";
-        order?: "list" | "random";
-        preload?: "none" | "metadata" | "auto";
+        loop?: string;
+        order?: string;
+        preload?: string;
         volume?: string;
         mutex?: string;
         "lrc-type"?: string;
