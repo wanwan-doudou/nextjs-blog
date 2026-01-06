@@ -17,6 +17,7 @@ export const siteConfig = {
     { title: "首页", icon: "Home", url: "/" },
     { title: "归档", icon: "Archive", url: "/archives" },
     { title: "壁纸", icon: "Image", url: "/wallpaper" },
+    { title: "收藏", icon: "Link", url: "/links" },
     { title: "关于我", icon: "User", url: "/about" },
   ],
 
@@ -83,6 +84,44 @@ export const siteConfig = {
   links: [
     { name: "Github", link: "https://github.com/" },
     { name: "知乎", link: "https://www.zhihu.com/" },
+  ],
+
+  // ==================== 收藏夹配置 ====================
+  bookmarks: [
+    {
+      title: "推荐工具",
+      items: [
+        {
+          name: "Next.js",
+          desc: "适用于 Web 的 React 框架",
+          link: "https://nextjs.org/",
+          icon: "https://nextjs.org/favicon.ico",
+        },
+        {
+          name: "Tailwind CSS",
+          desc: "Tailwind CSS 是一个实用程序优先的 CSS 框架，用于构建自定义的、响应式的、现代化的 UI",
+          link: "https://tailwindcss.com/",
+          icon: "https://tailwindcss.com/favicon.ico",
+        },
+      ],
+    },
+    {
+      title: "动漫追番",
+      items: [
+        {
+          name: "哔哩哔哩",
+          desc: "哔哩哔哩干杯",
+          link: "https://www.bilibili.com/",
+          icon: "https://www.bilibili.com/favicon.ico",
+        },
+        {
+          name: "moefun",
+          desc: "纯净的追番小站",
+          link: "https://www.moefun.net/",
+          icon: "https://video-snapshot01.pddpic.com/sprite-obs-bd/2025-09-12/2b732294-1b3b-4fb9-8f1a-1171c73d9440.png",
+        },
+      ],
+    },
   ],
 
   // ==================== 功能配置 ====================
