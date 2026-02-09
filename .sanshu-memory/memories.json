@@ -1,0 +1,11 @@
+{
+  "version": "2.0",
+  "project_path": "E:\\我的博客\\nextjs-blog",
+  "entries": [],
+  "last_dedup_at": "2026-02-09T02:36:50.208390700Z",
+  "config": {
+    "similarity_threshold": 0.7,
+    "dedup_on_startup": true,
+    "enable_dedup": true
+  }
+}
