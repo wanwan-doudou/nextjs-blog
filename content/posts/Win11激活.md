@@ -18,8 +18,10 @@ tags:
 
 依次输入以下三条命令：
 
-1.slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
-2.slmgr /skms kms.03k.org
-3.slmgr /ato
+```bash
+slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
+slmgr /skms kms.03k.org
+slmgr /ato
+```
 
 这样你的win11就激活啦

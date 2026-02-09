@@ -1,7 +1,16 @@
 {
   "version": "2.0",
   "project_path": "E:\\我的博客\\nextjs-blog",
-  "entries": [],
+  "entries": [
+    {
+      "id": "d89f8417-c27b-498b-b227-b24bb2083011",
+      "content": "Modified `src/lib/posts.ts` to add `searchPosts` function. Created `src/app/search/page.tsx` to implement search page using Next.js 16 App Router (handling `searchParams` as Promise).",
+      "content_normalized": "modified `src/lib/poststs` to add `searchposts` function created `src/app/search/pagetsx` to implement search page using nextjs 16 app router handling `searchparams` as promise",
+      "category": "Context",
+      "created_at": "2026-02-09T03:19:44.279479900Z",
+      "updated_at": "2026-02-09T03:19:44.279479900Z"
+    }
+  ],
   "last_dedup_at": "2026-02-09T02:36:50.208390700Z",
   "config": {
     "similarity_threshold": 0.7,

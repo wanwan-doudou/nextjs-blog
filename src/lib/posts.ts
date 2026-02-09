@@ -175,6 +175,21 @@ export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
   return posts.filter((post) => post.tags.includes(tag));
 }
 
+// 搜索文章
+export async function searchPosts(query: string): Promise<PostMeta[]> {
+  const posts = await getAllPostsMetaSorted();
+  const lowerQuery = query.toLowerCase();
+
+  return posts.filter((post) => {
+    const titleMatch = post.title.toLowerCase().includes(lowerQuery);
+    const excerptMatch = post.excerpt.toLowerCase().includes(lowerQuery);
+    const tagsMatch = post.tags.some((tag) =>
+      tag.toLowerCase().includes(lowerQuery)
+    );
+    return titleMatch || excerptMatch || tagsMatch;
+  });
+}
+
 // 获取归档数据（按年月分组）
 export async function getArchives(): Promise<
   { year: string; months: { month: string; posts: PostMeta[] }[] }[]
