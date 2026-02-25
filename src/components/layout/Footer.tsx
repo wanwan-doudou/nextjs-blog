@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { VisitorCounter } from "@/components/layout/VisitorCounter";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -7,8 +8,11 @@ export function Footer() {
     <footer className="bg-black/70 backdrop-blur-md border-t border-white/10 py-6">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-white/60 text-sm">
-            © {currentYear} {siteConfig.title}. All rights reserved.
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <div className="text-white/60 text-sm">
+              © {currentYear} {siteConfig.title}. All rights reserved.
+            </div>
+            <VisitorCounter />
           </div>
           <div className="text-white/60 text-sm">
             Powered by{" "}
