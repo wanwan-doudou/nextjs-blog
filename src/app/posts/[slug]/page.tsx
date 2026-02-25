@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPostMetaBySlug, getPostSlugs } from "@/lib/posts";
+import { getPostBySlug, getPostMetaBySlug, getPostSlugs, getPostNeighbors } from "@/lib/posts";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Calendar, Clock, Home, ChevronRight, Tags } from "lucide-react";
+import { Calendar, Clock, Home, ChevronRight, Tags, ArrowLeft, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import Link from "next/link";
+import { PostContent } from "@/components/post/PostContent";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -31,6 +32,7 @@ export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
   const post = await getPostBySlug(decodedSlug);
+  const neighbors = await getPostNeighbors(decodedSlug);
 
   if (!post) {
     notFound();
@@ -95,10 +97,41 @@ export default async function PostPage({ params }: PageProps) {
             </CardHeader>
 
             <CardContent>
-              <article
-                className="prose-gal"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              <PostContent content={post.content} />
+
+              <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8 pt-8 border-t border-white/10">
+                {neighbors.prev ? (
+                  <Link
+                    href={`/posts/${neighbors.prev.slug}`}
+                    className="group flex flex-col gap-1 text-sm max-w-[45%]"
+                  >
+                    <span className="text-white/50 flex items-center gap-1 group-hover:text-cyan-400 transition-colors">
+                      <ArrowLeft className="w-4 h-4" /> 上一篇
+                    </span>
+                    <span className="text-white font-medium group-hover:text-cyan-400 transition-colors line-clamp-1">
+                      {neighbors.prev.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <div />
+                )}
+
+                {neighbors.next ? (
+                  <Link
+                    href={`/posts/${neighbors.next.slug}`}
+                    className="group flex flex-col gap-1 text-sm text-right items-end max-w-[45%]"
+                  >
+                    <span className="text-white/50 flex items-center gap-1 group-hover:text-cyan-400 transition-colors">
+                      下一篇 <ArrowRight className="w-4 h-4" />
+                    </span>
+                    <span className="text-white font-medium group-hover:text-cyan-400 transition-colors line-clamp-1">
+                      {neighbors.next.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <div />
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>

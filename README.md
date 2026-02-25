@@ -1,95 +1,108 @@
 # Gal Blog - Next.js 重构版
 
-基于 Hexo Gal 主题使用 Next.js 14 重构的博客系统。
+基于 Hexo Gal 主题重构的博客系统，当前使用 Next.js 16 + React 19。
 
 ## 技术栈
 
-- **Next.js 14** - React 框架 (App Router)
-- **TailwindCSS** - 原子化 CSS 框架
-- **shadcn/ui** - UI 组件库
-- **Lucide Icons** - 图标库
+- Next.js 16 (App Router)
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- shadcn/ui + Radix UI
+- ESLint 10 (Flat Config) + typescript-eslint
 
 ## 功能特性
 
-- ✅ 首页文章列表 + 分页
-- ✅ 文章详情页
-- ✅ 归档页面
-- ✅ 标签页面
-- ✅ 关于页面
-- ✅ 壁纸页面
-- ✅ 背景轮播
-- ✅ 响应式设计
-- ✅ 暗色主题
+- 首页文章列表 + 分页
+- 文章详情页（Markdown 渲染）
+- 标签页 / 归档页
+- 搜索页
+- 友情链接页 / 关于页 / 壁纸页
+- 背景轮播与侧边栏小组件
+- 响应式布局与暗色主题
 
 ## 开始使用
 
 ```bash
-# 安装依赖
 npm install
-
-# 启动开发服务器
 npm run dev
+```
 
-# 构建生产版本
+开发环境默认地址：<http://localhost:3000>
+
+## 常用命令
+
+```bash
+# 代码检查
+npm run lint
+
+# 生产构建
 npm run build
 
-# 启动生产服务器
+# 启动生产服务
 npm run start
 ```
 
-访问 [http://localhost:3000](http://localhost:3000) 查看效果。
-
 ## 目录结构
 
-```
+```text
 src/
-├── app/                  # 页面路由
-│   ├── page.tsx          # 首页
-│   ├── posts/[slug]/     # 文章详情
-│   ├── archives/         # 归档
-│   ├── tags/[tag]/       # 标签
-│   ├── about/            # 关于
-│   └── wallpaper/        # 壁纸
-├── components/           # 组件
-│   ├── layout/           # 布局组件
-│   ├── sidebar/          # 侧边栏组件
-│   ├── posts/            # 文章组件
-│   └── ui/               # UI 组件
-├── config/               # 配置文件
-├── content/posts/        # Markdown 文章
-├── lib/                  # 工具函数
-└── styles/               # 样式文件
+├── app/                    # 路由与页面
+│   ├── (main)/
+│   ├── posts/[slug]/
+│   ├── tags/[tag]/
+│   ├── archives/
+│   ├── search/
+│   ├── links/
+│   ├── about/
+│   └── wallpaper/
+├── components/             # 业务组件 + UI 组件
+│   ├── layout/
+│   ├── sidebar/
+│   ├── posts/
+│   ├── post/
+│   ├── features/
+│   └── ui/
+├── config/site.ts          # 站点配置
+├── lib/posts.ts            # Markdown 文章读取与处理
+└── app/globals.css         # 全局样式（Tailwind CSS 4）
 
 content/
-└── posts/                # Markdown 文章目录
+├── posts/                  # 文章 Markdown
+└── archive/                # 历史归档
 ```
 
 ## 添加文章
 
-在 `content/posts/` 目录下创建 `.md` 文件：
+在 `content/posts/` 创建 `.md` 文件，例如：
 
 ```markdown
 ---
 title: 文章标题
-date: 2024-01-01
+date: 2026-02-25
+excerpt: 文章摘要（可选）
 tags:
   - 标签1
   - 标签2
 categories:
   - 分类
+preview: /images/preview.jpg
 top: false
 ---
 
 文章内容...
 ```
 
-## 配置
+## 配置说明
 
-编辑 `src/config/site.ts` 修改站点配置。
+- 站点与菜单配置：`src/config/site.ts`
+- Tailwind 配置：`tailwind.config.ts`
+- PostCSS 配置：`postcss.config.mjs`（使用 `@tailwindcss/postcss`）
+- ESLint 配置：`eslint.config.mjs`
 
 ## 部署
 
-推荐使用 Vercel 部署：
+推荐使用 Vercel：
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 

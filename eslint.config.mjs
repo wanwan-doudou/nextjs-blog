@@ -1,32 +1,21 @@
+import js from "@eslint/js";
 import nextPlugin from "@next/eslint-plugin-next";
-import reactPlugin from "eslint-plugin-react";
-import hooksPlugin from "eslint-plugin-react-hooks";
+import tseslint from "typescript-eslint";
 
-export default [
-  // React recommended (Flat config)
-  reactPlugin.configs.flat.recommended,
-  reactPlugin.configs.flat["jsx-runtime"],
-  
-  // Custom configuration for Next.js and React Hooks
+export default tseslint.config(
   {
+    ignores: [".next/**"],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
       "@next/next": nextPlugin,
-      "react-hooks": hooksPlugin,
     },
     rules: {
-      ...hooksPlugin.configs.recommended.rules,
-      ...nextPlugin.configs["recommended"].rules,
+      ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
     },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
-  },
-  
-  // Ignores
-  {
-      ignores: [".next/"],
   }
-];
+);

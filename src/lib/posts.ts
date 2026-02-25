@@ -118,10 +118,38 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
   const processedContent = await remark().use(html).process(file.markdown);
   const contentHtml = processedContent.toString();
+  const enhancedContent = enhanceCodeBlocks(contentHtml);
 
-  return { ...meta, content: contentHtml };
+  return { ...meta, content: enhancedContent };
 }
 
+function enhanceCodeBlocks(html: string): string {
+  // Match <pre> block with optional code class
+  // Captures: 1. class attribute (optional), 2. language (optional), 3. content
+  const regex = /<pre><code( class="language-([^"]+)")?>([\s\S]*?)<\/code><\/pre>/g;
+
+  return html.replace(regex, (match, classAttr, language, codeContent) => {
+    const lang = language || "text";
+    
+    return `
+      <div class="code-block-wrapper my-6 rounded-lg overflow-hidden bg-[#1e1e1e] border border-white/10 shadow-lg">
+        <div class="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/5 text-xs select-none">
+          <span class="text-white/60 font-medium uppercase tracking-wider">${lang}</span>
+          <button class="copy-btn flex items-center gap-1.5 text-white/60 hover:text-white transition-colors cursor-pointer group/btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy group-hover/btn:scale-110 transition-transform">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+            <span>复制代码</span>
+          </button>
+        </div>
+        <pre class="!my-0 !rounded-none !bg-transparent !p-4 overflow-x-auto"><code${classAttr || ''}>${codeContent}</code></pre>
+      </div>
+    `;
+  });
+}
+
+// 获取所有文章的元数据（包含 HTML 正文）
 const getAllPostsMetaSorted = cache(async (): Promise<PostMeta[]> => {
   const slugs = getPostSlugs();
   const metas = await Promise.all(slugs.map((slug) => getPostMetaBySlug(slug)));
@@ -229,4 +257,24 @@ export async function getRandomPosts(limit: number = 5): Promise<PostMeta[]> {
   const posts = await getAllPostsMetaSorted();
   const shuffled = [...posts].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, limit);
+}
+
+// 获取上一篇和下一篇文章
+export async function getPostNeighbors(
+  slug: string
+): Promise<{ prev: PostMeta | null; next: PostMeta | null }> {
+  const posts = await getAllPostsMetaSorted();
+  const index = posts.findIndex((post) => post.slug === slug);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  // posts 是按时间倒序排列的（最新的在前）
+  // next (newer) is at index - 1
+  // prev (older) is at index + 1
+  const next = index > 0 ? posts[index - 1] : null;
+  const prev = index < posts.length - 1 ? posts[index + 1] : null;
+
+  return { prev, next };
 }
