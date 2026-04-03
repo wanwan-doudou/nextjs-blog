@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
-import { LinkIcon, Github } from "lucide-react";
+import { LinkIcon, GitBranch } from "lucide-react";
 
 export function PersonalLinks() {
   if (!siteConfig.links || siteConfig.links.length === 0) {
@@ -26,7 +26,7 @@ export function PersonalLinks() {
                 className="text-sm text-white hover:text-cyan-400 transition-colors flex items-center gap-2"
               >
                 {link.name.toLowerCase().includes("github") && (
-                  <Github className="w-4 h-4" />
+                  <GitBranch className="w-4 h-4" />
                 )}
                 {link.name}
               </a>

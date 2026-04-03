@@ -2,7 +2,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { siteConfig } from "@/config/site";
-import { User, Github, Mail } from "lucide-react";
+import { User, GitBranch, Mail } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -56,7 +56,7 @@ export default function AboutPage() {
                       className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-cyan-500/30 rounded-lg text-white hover:text-cyan-400 transition-colors"
                     >
                       {link.name.toLowerCase().includes("github") && (
-                        <Github className="w-4 h-4" />
+                        <GitBranch className="w-4 h-4" />
                       )}
                       {link.name.toLowerCase().includes("mail") && (
                         <Mail className="w-4 h-4" />
