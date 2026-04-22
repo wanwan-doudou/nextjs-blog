@@ -7,7 +7,6 @@ type CountApiResponse = {
   value?: number;
 };
 
-const COUNT_API_BASE_URL = "https://api.countapi.xyz";
 const COUNTER_KEY = "site-visits";
 
 function buildNamespace() {
@@ -45,10 +44,11 @@ export function VisitorCounter() {
       const sessionFlag = `visitor-counter:${namespace}:${COUNTER_KEY}`;
       const hasCountedInSession = getSessionFlag(sessionFlag);
       const action = hasCountedInSession ? "get" : "hit";
-      const url = `${COUNT_API_BASE_URL}/${action}/${encodeURIComponent(namespace)}/${encodeURIComponent(COUNTER_KEY)}`;
 
       try {
-        const response = await fetch(url, { cache: "no-store" });
+        const response = await fetch(`/api/visitor-count?action=${action}`, {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Count API request failed.");
         }
