@@ -1,6 +1,6 @@
 ---
 title: Element UI 常用组件实践：Carousel、Pagination、Dropdown
-date: 2026-02-09 00:00:00
+date: 2022-02-09 00:00:00
 tags:
   - element
   - 前端
