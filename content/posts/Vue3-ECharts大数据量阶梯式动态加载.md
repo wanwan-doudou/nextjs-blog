@@ -1,3 +1,11 @@
+---
+title: "Vue3 + ECharts 大数据量阶梯式动态加载实践"
+date: 2026-02-09
+tags: ["Vue3", "ECharts", "前端", "性能优化"]
+categories: ["前端开发"]
+description: "记录在 Vue3 和 ECharts 中处理大数据量历史曲线时，如何通过阶梯式动态加载降低后端查询和前端渲染压力。"
+---
+
 # Vue3 + ECharts 大数据量阶梯式动态加载实践
 
 ## 1. 背景与挑战
