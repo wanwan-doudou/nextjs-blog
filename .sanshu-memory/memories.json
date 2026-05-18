@@ -17,6 +17,14 @@
       "category": "Preference",
       "created_at": "2026-04-21T06:05:42.156665300Z",
       "updated_at": "2026-04-21T06:05:42.156665300Z"
+    },
+    {
+      "id": "2c3fc898-4c0b-47c1-90df-5d53bca0eeae",
+      "content": "用户偏好补充：所有关键提问、方案确认和完成确认必须通过 zhi 展示；涉及页面美化、UI 描述、设计系统或 UI 审查时，优先使用单一 uiux 工具并参考返回的 prompt、uiux_hits 与 project_context；需要实时搜索信息时优先使用可用的实时搜索工具获取最新准确数据。",
+      "content_normalized": "用户偏好补充所有关键提问方案确认和完成确认必须通过 zhi 展示涉及页面美化ui 描述设计系统或 ui 审查时优先使用单一 uiux 工具并参考返回的 promptuiux_hits 与 project_context需要实时搜索信息时优先使用可用的实时搜索工具获取最新准确数据",
+      "category": "Preference",
+      "created_at": "2026-05-18T07:42:13.842574300Z",
+      "updated_at": "2026-05-18T07:42:13.842574300Z"
     }
   ],
   "last_dedup_at": "2026-02-09T02:36:50.208390700Z",
