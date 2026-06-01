@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,37 +12,48 @@ export default function WallpaperPage() {
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const loadImages = (count: number = siteConfig.wallpaper.batchSize) => {
-    const { pcApiUrls } = siteConfig.wallpaper;
-    const newImages: string[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const randomApi = pcApiUrls[Math.floor(Math.random() * pcApiUrls.length)];
-      newImages.push(`${randomApi}?t=${Date.now()}-${i}-${Math.random()}`);
+  const fetchWallpaperImages = async (count: number = siteConfig.wallpaper.batchSize): Promise<string[]> => {
+    try {
+      const res = await fetch(`/api/wallpaper?count=${count}`);
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      return data.images || [];
+    } catch (err) {
+      console.warn("Failed to load wallpapers from API, using client fallback:", err);
+      // 客户端 fallback 机制：若后端 API 出错，直接在前端构造原随机参数，确保基本功能依然可用
+      const { pcApiUrls } = siteConfig.wallpaper;
+      const fallbackImages: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const randomApi = pcApiUrls[Math.floor(Math.random() * pcApiUrls.length)];
+        fallbackImages.push(`${randomApi}?t=${Date.now()}-${i}-${Math.random()}`);
+      }
+      return fallbackImages;
     }
-
-    return newImages;
   };
 
   useEffect(() => {
-    setImages(loadImages());
+    const initLoad = async () => {
+      setLoading(true);
+      const initialImages = await fetchWallpaperImages();
+      setImages(initialImages);
+      setLoading(false);
+    };
+    initLoad();
   }, []);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = async () => {
     if (images.length >= siteConfig.wallpaper.maxImages) return;
     setLoading(true);
-    setTimeout(() => {
-      setImages((prev) => [...prev, ...loadImages()]);
-      setLoading(false);
-    }, 500);
+    const newImages = await fetchWallpaperImages();
+    setImages((prev) => [...prev, ...newImages]);
+    setLoading(false);
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setImages(loadImages());
-      setLoading(false);
-    }, 500);
+    const refreshedImages = await fetchWallpaperImages();
+    setImages(refreshedImages);
+    setLoading(false);
   };
 
   const handleDownload = (url: string) => {
@@ -83,12 +94,10 @@ export default function WallpaperPage() {
                 className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
                 onClick={() => setSelectedImage(url)}
               >
-                <Image
+                <img
                   src={url}
                   alt={`壁纸 ${index + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -137,12 +146,9 @@ export default function WallpaperPage() {
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-5xl w-full">
-            <Image
+            <img
               src={selectedImage}
               alt="壁纸预览"
-              width={1920}
-              height={1080}
-              sizes="(max-width: 768px) 100vw, 80vw"
               className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
             />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
