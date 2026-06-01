@@ -14,7 +14,7 @@ export function AuthorCard() {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col items-center">
-        <Avatar className="w-32 h-32 border-4 border-white/20">
+        <Avatar className="w-32 h-32 border-4 border-white/20 transition-transform duration-300 ease-in-out hover:rotate-[360deg]">
           <AvatarImage src={siteConfig.authorImage} alt={siteConfig.author} />
           <AvatarFallback className="text-2xl bg-gradient-to-br from-cyan-500 to-pink-500">
             {siteConfig.author.charAt(0)}

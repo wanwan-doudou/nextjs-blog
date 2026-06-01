@@ -26,7 +26,7 @@ export default function AboutPage() {
             <CardContent className="space-y-6">
               {/* 头像和基本信息 */}
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                <Avatar className="w-32 h-32 border-4 border-white/20">
+                <Avatar className="w-32 h-32 border-4 border-white/20 transition-transform duration-300 ease-in-out hover:rotate-[360deg]">
                   <AvatarImage
                     src={siteConfig.authorImage}
                     alt={siteConfig.author}
