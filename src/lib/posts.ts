@@ -109,19 +109,21 @@ export const getPostMetaBySlug = cache(
 );
 
 // 根据slug获取文章数据（包含 HTML 正文）
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const file = await readPostFile(slug);
-  if (!file) return null;
+export const getPostBySlug = cache(
+  async (slug: string): Promise<Post | null> => {
+    const file = await readPostFile(slug);
+    if (!file) return null;
 
-  const meta = await getPostMetaBySlug(slug);
-  if (!meta) return null;
+    const meta = await getPostMetaBySlug(slug);
+    if (!meta) return null;
 
-  const processedContent = await remark().use(html).process(file.markdown);
-  const contentHtml = processedContent.toString();
-  const enhancedContent = enhanceCodeBlocks(contentHtml);
+    const processedContent = await remark().use(html).process(file.markdown);
+    const contentHtml = processedContent.toString();
+    const enhancedContent = enhanceCodeBlocks(contentHtml);
 
-  return { ...meta, content: enhancedContent };
-}
+    return { ...meta, content: enhancedContent };
+  }
+);
 
 function enhanceCodeBlocks(html: string): string {
   // Match <pre> block with optional code class
