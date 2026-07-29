@@ -1,13 +1,11 @@
 import js from "@eslint/js";
 import nextPlugin from "@next/eslint-plugin-next";
-import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default [
   {
-    ignores: [".next/**"],
+    ignores: [".next/**", "node_modules/**"],
   },
   js.configs.recommended,
-  ...tseslint.configs.recommended,
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
@@ -16,6 +14,8 @@ export default tseslint.config(
     rules: {
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
+      "no-undef": "off",
+      "no-unused-vars": "off",
     },
-  }
-);
+  },
+];

@@ -13,6 +13,9 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
+  experimental: {
+    useTypeScriptCli: true,
+  },
 };
 
 export default nextConfig;

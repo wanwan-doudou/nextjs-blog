@@ -1,12 +1,12 @@
-# Gal Blog - Next.js 重构版
+# Gal Blog
 
-基于 Hexo Gal 主题重构的博客系统，当前使用 Next.js 16 + React 19。
+现代化的二次元风格个人博客系统，采用 Next.js 16 + React 19 + TypeScript 7 打造。
 
 ## 技术栈
 
 - Next.js 16 (App Router)
 - React 19
-- TypeScript 5
+- TypeScript 7
 - Tailwind CSS 4
 - shadcn/ui + Radix UI
 - ESLint 10 (Flat Config) + typescript-eslint

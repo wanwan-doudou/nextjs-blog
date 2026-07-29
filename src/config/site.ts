@@ -75,15 +75,11 @@ export const siteConfig = {
   },
 
   // 友情链接
-  friendLinks: [
-    { name: "KDays Forum", link: "http://kdays.net/days/" },
-    { name: "萌导航", link: "http://www.moe123.com/" },
-  ],
+  friendLinks: [] as Array<{ name: string; link: string }>,
 
   // 个人链接
   links: [
-    { name: "Github", link: "https://github.com/" },
-    { name: "知乎", link: "https://www.zhihu.com/" },
+    { name: "Github", link: "https://github.com/wanwan-doudou" },
   ],
 
   // ==================== 收藏夹配置 ====================

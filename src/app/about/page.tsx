@@ -72,13 +72,14 @@ export default function AboutPage() {
                 <h3 className="text-lg font-semibold text-white mb-4">关于本站</h3>
                 <div className="prose-gal">
                   <p>
-                    这是一个使用 Next.js 16 重构的博客，基于原 Hexo Gal 主题设计。
+                    这是一个极简且现代化的二次元风格个人博客系统。
                   </p>
                   <p>技术栈：</p>
                   <ul>
+                    <li>Next.js 16 (App Router / Turbopack)</li>
                     <li>React 19</li>
-                    <li>Next.js 16 (App Router)</li>
-                    <li>TailwindCSS</li>
+                    <li>TypeScript 7</li>
+                    <li>Tailwind CSS 4</li>
                     <li>shadcn/ui</li>
                     <li>Lucide Icons</li>
                   </ul>
