@@ -78,7 +78,7 @@ export default function AboutPage() {
                   <ul>
                     <li>Next.js 16 (App Router / Turbopack)</li>
                     <li>React 19</li>
-                    <li>TypeScript 7</li>
+                    <li>TypeScript</li>
                     <li>Tailwind CSS 4</li>
                     <li>shadcn/ui</li>
                     <li>Lucide Icons</li>
