@@ -9,7 +9,7 @@
 - TypeScript 7
 - Tailwind CSS 4
 - shadcn/ui + Radix UI
-- ESLint 10 (Flat Config) + typescript-eslint
+- oxlint（代码检查）
 
 ## 功能特性
 
@@ -33,8 +33,14 @@ npm run dev
 ## 常用命令
 
 ```bash
-# 代码检查
+# 代码检查（oxlint + 类型检查）
 npm run lint
+
+# 自动修复可修复的 lint 问题
+npm run lint:fix
+
+# 仅类型检查
+npm run typecheck
 
 # 生产构建
 npm run build
@@ -98,7 +104,10 @@ top: false
 - 站点与菜单配置：`src/config/site.ts`
 - Tailwind 配置：`tailwind.config.ts`
 - PostCSS 配置：`postcss.config.mjs`（使用 `@tailwindcss/postcss`）
-- ESLint 配置：`eslint.config.mjs`
+- Lint 配置：`.oxlintrc.json`
+
+> 说明：TypeScript 7 与 typescript-eslint 暂不兼容（[typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940)，需等 TS 7.1 的新 API），
+> 因此改用原生支持 TypeScript 的 oxlint。待 typescript-eslint 支持 TS 7 后可按需切回 ESLint。
 
 ## 部署
 

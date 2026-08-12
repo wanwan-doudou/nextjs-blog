@@ -18,11 +18,11 @@ export function SakanaWidget() {
   const { position } = siteConfig.sakanaWidget;
 
   const initSakana = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     if (typeof window !== "undefined" && (window as any).SakanaWidget) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SakanaWidget = (window as any).SakanaWidget;
-      new SakanaWidget({ character: "takina" }).mount("#sakana-widget");
+      // oxlint-disable-next-line typescript/no-explicit-any
+      const SakanaWidgetCtor = (window as any).SakanaWidget;
+      new SakanaWidgetCtor({ character: "takina" }).mount("#sakana-widget");
     }
   };
 

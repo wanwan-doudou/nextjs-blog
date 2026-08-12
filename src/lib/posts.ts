@@ -125,12 +125,12 @@ export const getPostBySlug = cache(
   }
 );
 
-function enhanceCodeBlocks(html: string): string {
+function enhanceCodeBlocks(htmlContent: string): string {
   // Match <pre> block with optional code class
   // Captures: 1. class attribute (optional), 2. language (optional), 3. content
   const regex = /<pre><code( class="language-([^"]+)")?>([\s\S]*?)<\/code><\/pre>/g;
 
-  return html.replace(regex, (match, classAttr, language, codeContent) => {
+  return htmlContent.replace(regex, (match, classAttr, language, codeContent) => {
     const lang = language || "text";
     
     return `
@@ -244,7 +244,7 @@ export async function getArchives(): Promise<
       year,
       months: Object.entries(months)
         .sort(([a], [b]) => parseInt(b) - parseInt(a))
-        .map(([month, posts]) => ({ month, posts })),
+        .map(([month, monthPosts]) => ({ month, posts: monthPosts })),
     }));
 }
 

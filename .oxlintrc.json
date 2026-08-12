@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "nextjs", "jsx-a11y", "import"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    // 项目用 React 17+ 自动 JSX 运行时（tsconfig jsx: react-jsx），无需导入 React
+    "react/react-in-jsx-scope": "off",
+    // globals.css 这类副作用导入是 Next.js 的常规写法
+    "import/no-unassigned-import": "off"
+  },
+  "ignorePatterns": [".next/**", "node_modules/**", "public/**"]
+}

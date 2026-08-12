@@ -47,5 +47,8 @@ next-env.d.ts
 # playwright-mcp
 .playwright-mcp/
 
+# claude code（本地配置与 worktree，不入库）
+.claude/
+
 # sanshu-memory
 .sanshu-memory/
