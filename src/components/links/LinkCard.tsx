@@ -20,6 +20,7 @@ export function LinkCard({ item }: LinkCardProps) {
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={item.name}
       className="block group"
     >
       <Card className="bg-transparent border-white/10 hover:border-cyan-400/50 transition-all duration-300 h-full overflow-hidden group-hover:bg-white/5">

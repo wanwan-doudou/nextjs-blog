@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+/* oxlint-disable nextjs/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -40,6 +40,15 @@ export default function WallpaperPage() {
     };
     initLoad();
   }, []);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedImage]);
 
   const handleLoadMore = async () => {
     if (images.length >= siteConfig.wallpaper.maxImages) return;
@@ -91,24 +100,28 @@ export default function WallpaperPage() {
             {images.map((url, index) => (
               <div
                 key={url}
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => setSelectedImage(url)}
+                className="relative aspect-video rounded-lg overflow-hidden group"
               >
-                <img
-                  src={url}
-                  alt={`壁纸 ${index + 1}`}
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <button
+                  type="button"
+                  aria-label={`查看壁纸 ${index + 1}`}
+                  className="absolute inset-0 w-full h-full cursor-pointer"
+                  onClick={() => setSelectedImage(url)}
+                >
+                  <img
+                    src={url}
+                    alt={`壁纸 ${index + 1}`}
+                    className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                </button>
+                {/* 遮罩不吃点击，让穿透到下层的缩略图按钮；仅下载按钮重新接管指针事件 */}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDownload(url);
-                    }}
-                    className="text-white hover:bg-white/20"
+                    onClick={() => handleDownload(url)}
+                    className="text-white hover:bg-white/20 pointer-events-auto"
                   >
                     <Download className="w-5 h-5" />
                   </Button>
@@ -141,10 +154,14 @@ export default function WallpaperPage() {
 
       {/* 图片预览模态框 */}
       {selectedImage && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+          {/* 遮罩单独抽成按钮，这样点击空白处关闭的同时也能被键盘聚焦（Esc 关闭见上方 effect） */}
+          <button
+            type="button"
+            aria-label="关闭预览"
+            className="absolute inset-0 cursor-default"
+            onClick={() => setSelectedImage(null)}
+          />
           <div className="relative max-w-5xl w-full">
             <img
               src={selectedImage}
@@ -153,10 +170,7 @@ export default function WallpaperPage() {
             />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
               <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDownload(selectedImage);
-                }}
+                onClick={() => handleDownload(selectedImage)}
                 className="bg-cyan-500 hover:bg-cyan-600 text-white"
               >
                 <Download className="w-4 h-4 mr-2" />
