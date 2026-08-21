@@ -9,7 +9,10 @@
     // 项目用 React 17+ 自动 JSX 运行时（tsconfig jsx: react-jsx），无需导入 React
     "react/react-in-jsx-scope": "off",
     // globals.css 这类副作用导入是 Next.js 的常规写法
-    "import/no-unassigned-import": "off"
+    "import/no-unassigned-import": "off",
+    // 项目里的 setState-in-effect 都是刻意的：mounted 标记用于规避水合不一致，
+    // matchMedia 与随机图源只能在客户端读取，无法在 render 阶段推导
+    "react/set-state-in-effect": "warn"
   },
   "ignorePatterns": [".next/**", "node_modules/**", "public/**"]
 }
