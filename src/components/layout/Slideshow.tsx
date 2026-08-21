@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function Slideshow() {
   const [loaded, setLoaded] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const intervalMs = Math.max(
     2000,
@@ -25,10 +26,7 @@ export function Slideshow() {
   const incomingLayerRef = useRef<0 | 1 | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    setIsDesktop(window.matchMedia("(min-width: 768px)").matches);
-  }, []);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     incomingLayerRef.current = incomingLayer;
@@ -48,6 +46,11 @@ export function Slideshow() {
       return `${api}${api.includes("?") ? "&" : "?"}t=${Date.now()}`;
     };
 
+    // 重新进入桌面端时从干净状态开始：上一轮被打断的过渡若残留 incomingLayer，
+    // preloadAndTransition 会被首行守卫永久拦住，轮播再也不会前进
+    setActiveLayer(0);
+    setIncomingLayer(null);
+    setFading(false);
     setLayer0Src(getRandomImage());
     setLayer1Src(getRandomImage());
     setLayer0AnimKey((v) => v + 1);
@@ -56,6 +59,9 @@ export function Slideshow() {
 
   useEffect(() => {
     if (!loaded || !isDesktop) return;
+
+    // 视口跨断点会中途销毁本 effect，需要丢弃已在途的图片回调
+    let cancelled = false;
 
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
@@ -70,6 +76,7 @@ export function Slideshow() {
       img.decoding = "async";
       img.src = src;
       img.onload = () => {
+        if (cancelled) return;
         const nextLayer: 0 | 1 = activeLayerRef.current === 0 ? 1 : 0;
 
         if (nextLayer === 0) {
@@ -81,10 +88,9 @@ export function Slideshow() {
         }
 
         setIncomingLayer(nextLayer);
-        const rafId = requestAnimationFrame(() => setFading(true));
+        rafRef.current = requestAnimationFrame(() => setFading(true));
 
         transitionTimeoutRef.current = setTimeout(() => {
-          cancelAnimationFrame(rafId);
           setActiveLayer(nextLayer);
           setIncomingLayer(null);
           setFading(false);
@@ -97,8 +103,10 @@ export function Slideshow() {
     }, intervalMs);
 
     return () => {
+      cancelled = true;
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, [loaded, isDesktop, intervalMs, fadeMs]);
 
