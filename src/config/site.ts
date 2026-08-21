@@ -145,17 +145,6 @@ export const siteConfig = {
   postsPerPage: 10,
 
   // ==================== 小组件配置 ====================
-  // 音乐播放器
-  musicPlayer: {
-    enable: true,
-    title: "歌单",
-    playlistId: "8692231711",
-    server: "tencent",
-    autoplay: false,
-    volume: 0.1,
-    theme: "#cc543a",
-  },
-
   // 看板娘
   sakanaWidget: {
     enable: true,
